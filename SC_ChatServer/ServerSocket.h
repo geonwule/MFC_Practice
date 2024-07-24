@@ -1,24 +1,24 @@
 #pragma once
 #include <afxsock.h>
 
+class CSCChatServerDlg;
+
 class CServerSocket : public CAsyncSocket
 {
 public:
-	CServerSocket(CDialog* pDialog);
+	CServerSocket(CSCChatServerDlg* pDialog);
 	virtual void OnAccept(int nErrorCode);
 
 private:
-	CDialog* m_pDialog;
-public:
-	int test();
+	CSCChatServerDlg* m_pDialog;
 };
 
 class CClientSocket : public CAsyncSocket
 {
 public:
-	CClientSocket(CDialog* pDialog);
+	CClientSocket(CSCChatServerDlg* pDialog);
 	virtual void OnReceive(int nErrorCode);
 
 private:
-	CDialog* m_pDialog;
+	CSCChatServerDlg* m_pDialog;
 };

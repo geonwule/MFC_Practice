@@ -241,7 +241,7 @@ void CSCChatServerDlg::OnBnClickedButtonStart()
 	if (!m_pServerSocket)
 	{
 		m_pServerSocket = new CServerSocket(this);
-		if (m_pServerSocket->Create(0) && m_pServerSocket->Listen())
+		if (m_pServerSocket->Create(5150, SOCK_STREAM, FD_ACCEPT, _T("0.0.0.0")) && m_pServerSocket->Listen())
 		{
 			m_bIsHost = TRUE;
 			AfxMessageBox(_T("Server Start!"));
@@ -265,4 +265,10 @@ void CSCChatServerDlg::OnBnClickedButtonStop()
 		m_bIsHost = FALSE;
 		AfxMessageBox(_T("Server Stop!"));
 	}
+}
+
+
+void CSCChatServerDlg::AddClient(CClientSocket* pClient)
+{
+	m_ClientSocketList.AddTail(pClient);
 }

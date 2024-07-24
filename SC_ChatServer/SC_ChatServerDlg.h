@@ -56,4 +56,5 @@ private:
 public:
 	afx_msg void OnBnClickedButtonStart();
 	afx_msg void OnBnClickedButtonStop();
+	void AddClient(CClientSocket* pClient);
 };
