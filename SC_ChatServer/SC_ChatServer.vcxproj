@@ -188,9 +188,11 @@
     <ClInclude Include="Resource.h" />
     <ClInclude Include="SC_ChatServer.h" />
     <ClInclude Include="SC_ChatServerDlg.h" />
+    <ClInclude Include="ServerSocket.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CServerSocket.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -199,6 +201,7 @@
     </ClCompile>
     <ClCompile Include="SC_ChatServer.cpp" />
     <ClCompile Include="SC_ChatServerDlg.cpp" />
+    <ClCompile Include="ServerSocket.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="SCChatServer.rc" />

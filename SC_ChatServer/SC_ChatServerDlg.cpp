@@ -53,8 +53,28 @@ END_MESSAGE_MAP()
 CSCChatServerDlg::CSCChatServerDlg(CWnd* pParent /*=nullptr*/)
 	: CDialogEx(IDD_SC_CHATSERVER_DIALOG, pParent)
 	, m_strInput(_T(""))
+	, m_pServerSocket(nullptr)
+	, m_pClientSocket(nullptr)
+	, m_bIsHost(FALSE)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
+	AfxSocketInit(); // 소켓 초기화 
+}
+
+CSCChatServerDlg::~CSCChatServerDlg()
+{
+	if (m_pServerSocket)
+	{
+		delete m_pServerSocket;
+		m_pServerSocket = nullptr;
+	}
+	
+	for (POSITION pos = m_ClientSocketList.GetHeadPosition(); pos != nullptr;)
+	{
+		CClientSocket* pClientSocket = m_ClientSocketList.GetNext(pos);
+		delete pClientSocket;
+	}
+	m_ClientSocketList.RemoveAll();
 }
 
 void CSCChatServerDlg::DoDataExchange(CDataExchange* pDX)
@@ -70,28 +90,12 @@ BEGIN_MESSAGE_MAP(CSCChatServerDlg, CDialogEx)
 	ON_WM_QUERYDRAGICON()
 	ON_EN_CHANGE(IDC_EDIT_INPUT, &CSCChatServerDlg::OnEnChangeEditInput)
 	ON_BN_CLICKED(IDC_BUTTON_INPUT, &CSCChatServerDlg::OnBnClickedButtonInput)
+	ON_BN_CLICKED(IDC_BUTTON_START, &CSCChatServerDlg::OnBnClickedButtonStart)
+	ON_BN_CLICKED(IDC_BUTTON_STOP, &CSCChatServerDlg::OnBnClickedButtonStop)
 END_MESSAGE_MAP()
 
 
 // CSCChatServerDlg 메시지 처리기
-
-BOOL CSCChatServerDlg::PreTranslateMessage(MSG* pMsg)
-{
-	if (pMsg->message == WM_KEYDOWN)
-	{
-		if (pMsg->wParam == VK_RETURN)
-		{
-			// Edit 컨트롤의 ID를 확인
-			if (GetFocus()->GetDlgCtrlID() == IDC_EDIT_INPUT)
-			{
-				OnBnClickedButtonInput();
-				return TRUE; // 메시지 처리 완료
-			}
-		}
-	}
-
-	return CDialogEx::PreTranslateMessage(pMsg);
-}
 
 BOOL CSCChatServerDlg::OnInitDialog()
 {
@@ -176,6 +180,24 @@ HCURSOR CSCChatServerDlg::OnQueryDragIcon()
 	return static_cast<HCURSOR>(m_hIcon);
 }
 
+// EditContol에서 엔터를 누르면 전송버튼이 눌리게 해주는 함수
+BOOL CSCChatServerDlg::PreTranslateMessage(MSG* pMsg)
+{
+	if (pMsg->message == WM_KEYDOWN)
+	{
+		if (pMsg->wParam == VK_RETURN)
+		{
+			// Edit 컨트롤의 ID를 확인
+			if (GetFocus()->GetDlgCtrlID() == IDC_EDIT_INPUT)
+			{
+				OnBnClickedButtonInput();
+				return TRUE; // 메시지 처리 완료
+			}
+		}
+	}
+
+	return CDialogEx::PreTranslateMessage(pMsg);
+}
 
 
 void CSCChatServerDlg::OnEnChangeEditInput()
@@ -205,5 +227,42 @@ void CSCChatServerDlg::OnBnClickedButtonInput()
 	{
 		pEdit->SetWindowText(_T(""));  // Edit 컨트롤 내용 지우기
 		pEdit->SetFocus();  // Edit 컨트롤로 포커스 이동
+	}
+}
+
+int CSCChatServerDlg::AddMessage(CString msg)
+{
+	m_strRoom.InsertString(0, msg);
+	return 0;
+}
+
+void CSCChatServerDlg::OnBnClickedButtonStart()
+{
+	if (!m_pServerSocket)
+	{
+		m_pServerSocket = new CServerSocket(this);
+		if (m_pServerSocket->Create(0) && m_pServerSocket->Listen())
+		{
+			m_bIsHost = TRUE;
+			AfxMessageBox(_T("Server Start!"));
+		}
+		else
+		{
+			AfxMessageBox(_T("Server Start Failed!"));
+			delete m_pServerSocket;
+			m_pServerSocket = nullptr;
+		}
+	}
+}
+
+
+void CSCChatServerDlg::OnBnClickedButtonStop()
+{
+	if (m_pServerSocket)
+	{
+		delete m_pServerSocket;
+		m_pServerSocket = nullptr;
+		m_bIsHost = FALSE;
+		AfxMessageBox(_T("Server Stop!"));
 	}
 }

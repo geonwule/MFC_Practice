@@ -3,6 +3,7 @@
 //
 
 #pragma once
+#include "ServerSocket.h"
 
 
 // CSCChatServerDlg 대화 상자
@@ -11,6 +12,7 @@ class CSCChatServerDlg : public CDialogEx
 // 생성입니다.
 public:
 	CSCChatServerDlg(CWnd* pParent = nullptr);	// 표준 생성자입니다.
+	virtual ~CSCChatServerDlg();
 
 // 대화 상자 데이터입니다.
 #ifdef AFX_DESIGN_TIME
@@ -42,5 +44,16 @@ public:
 private:
 	CListBox m_strRoom;
 
+public:
+	int AddMessage(CString msg);
 
+private:
+	CServerSocket* m_pServerSocket;
+	CClientSocket* m_pClientSocket;
+	CList<CClientSocket*> m_ClientSocketList;
+	BOOL m_bIsHost;
+
+public:
+	afx_msg void OnBnClickedButtonStart();
+	afx_msg void OnBnClickedButtonStop();
 };
