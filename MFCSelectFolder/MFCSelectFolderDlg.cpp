@@ -177,6 +177,8 @@ void CMFCSelectFolderDlg::OnBnClickedButtonBrowse()
 		while (bWorking)
 		{
 			bWorking = finder.FindNextFile();
+			if (finder.IsDots())
+				continue;
 			listFiles.AddString(finder.GetFileName());
 		}
 	}
