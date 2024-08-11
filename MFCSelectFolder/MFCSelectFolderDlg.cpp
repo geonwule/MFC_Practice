@@ -52,6 +52,7 @@ END_MESSAGE_MAP()
 
 CMFCSelectFolderDlg::CMFCSelectFolderDlg(CWnd* pParent /*=nullptr*/)
 	: CDialogEx(IDD_MFCSELECTFOLDER_DIALOG, pParent)
+	, strPath(_T(""))
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
@@ -59,12 +60,15 @@ CMFCSelectFolderDlg::CMFCSelectFolderDlg(CWnd* pParent /*=nullptr*/)
 void CMFCSelectFolderDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
+	DDX_Text(pDX, IDC_EDIT_PATH, strPath);
+	DDX_Control(pDX, IDC_LIST_FILES, listFiles);
 }
 
 BEGIN_MESSAGE_MAP(CMFCSelectFolderDlg, CDialogEx)
 	ON_WM_SYSCOMMAND()
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
+	ON_BN_CLICKED(IDC_BUTTON_BROWSE, &CMFCSelectFolderDlg::OnBnClickedButtonBrowse)
 END_MESSAGE_MAP()
 
 
@@ -153,3 +157,27 @@ HCURSOR CMFCSelectFolderDlg::OnQueryDragIcon()
 	return static_cast<HCURSOR>(m_hIcon);
 }
 
+
+
+void CMFCSelectFolderDlg::OnBnClickedButtonBrowse()
+{
+	CFolderPickerDialog dlgFolder(NULL, OFN_FILEMUSTEXIST | OFN_PATHMUSTEXIST, this);
+
+	if (dlgFolder.DoModal() == IDOK)
+	{
+		strPath = dlgFolder.GetPathName();
+		UpdateData(FALSE);
+
+		listFiles.ResetContent();
+
+		CFileFind finder;
+		CString strWildcard = strPath + _T("\\*.*");
+		
+		BOOL bWorking = finder.FindFile(strWildcard);
+		while (bWorking)
+		{
+			bWorking = finder.FindNextFile();
+			listFiles.AddString(finder.GetFileName());
+		}
+	}
+}
