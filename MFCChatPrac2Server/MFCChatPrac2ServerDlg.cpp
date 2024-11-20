@@ -264,14 +264,16 @@ afx_msg LRESULT CMFCChatPrac2ServerDlg::OnReceive(WPARAM wParam, LPARAM lParam)
 int CMFCChatPrac2ServerDlg::postListBox(CString strMSG)
 {
 	int i = m_listBox.GetCount();
-	m_listBox.InsertString(i, strMSG);
+	int nIndex = m_listBox.InsertString(i, strMSG);
+	m_listBox.SetCurSel(nIndex);              // 맨 마지막 항목을 선택
 	return 0;
 }
 
 int CMFCChatPrac2ServerDlg::postUserListBox(CString strMSG)
 {
 	int i = m_listBoxUser.GetCount();
-	m_listBoxUser.InsertString(i, strMSG);
+	int nIndex = m_listBoxUser.InsertString(i, strMSG);
+	m_listBox.SetCurSel(nIndex);              // 맨 마지막 항목을 선택
 	return 0;
 }
 

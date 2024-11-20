@@ -239,7 +239,8 @@ void CMFCChatPrac2ClientDlg::OnClickedButtonConnect()
 int CMFCChatPrac2ClientDlg::postListBox(CString strMsg)
 {
 	int i = m_listBox.GetCount();
-	m_listBox.InsertString(i, strMsg);
+	int nIndex = m_listBox.InsertString(i, strMsg);
+	m_listBox.SetCurSel(nIndex);              // 맨 마지막 항목을 선택
 	return 0;
 }
 
