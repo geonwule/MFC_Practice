@@ -213,7 +213,7 @@ afx_msg LRESULT CMFCChatPrac2ClientDlg::OnReceive(WPARAM wParam, LPARAM lParam)
 	else { // 일반적으로 메시지를 받는 경우
 		postListBox(strMsg);
 	}
-	UpdateData(FALSE);
+
 	return 0;
 }
 

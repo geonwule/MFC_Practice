@@ -254,7 +254,7 @@ afx_msg LRESULT CMFCChatPrac2ServerDlg::OnReceive(WPARAM wParam, LPARAM lParam)
 		sendToAll(soc_client->getNick() + _T(" : ") + strMsg, soc_client->getID());
 	}
 
-	UpdateData(FALSE);
+
 	return 0;
 }
 
