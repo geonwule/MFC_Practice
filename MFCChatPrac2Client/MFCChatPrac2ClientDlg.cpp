@@ -195,6 +195,38 @@ int CMFCChatPrac2ClientDlg::updateUserList(CString strList)
 	return 0;
 }
 
+#include <shellapi.h>
+
+void RemoveBalloonNotification() {
+	NOTIFYICONDATA nid = {};
+	nid.cbSize = sizeof(NOTIFYICONDATA);
+	nid.hWnd = AfxGetMainWnd()->GetSafeHwnd(); // 메인 윈도우 핸들
+	nid.uID = 1; // 아이콘 ID (생성 시와 동일한 ID)
+	Shell_NotifyIcon(NIM_DELETE, &nid); // 기존 알림 제거
+}
+
+
+static void ShowBalloonNotification(const CString & message, const CString& title = _T("New Message!")) {
+	// 기존 알림 제거
+	RemoveBalloonNotification();
+
+	// 새로운 알림 생성 및 표시
+	NOTIFYICONDATA nid = {};
+	nid.cbSize = sizeof(NOTIFYICONDATA);
+	nid.hWnd = AfxGetMainWnd()->GetSafeHwnd(); // 메인 윈도우 핸들
+	nid.uID = 1; // 아이콘 ID
+	nid.uFlags = NIF_INFO | NIF_ICON | NIF_MESSAGE;
+	nid.hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME); // 알림에 사용할 아이콘
+	_tcscpy_s(nid.szInfoTitle, title); // 제목
+	_tcscpy_s(nid.szInfo, message);   // 메시지
+	nid.uTimeout = 500; // 알림 표시 시간 (밀리초)
+	//nid.dwInfoFlags = NIIF_INFO; // 알림 아이콘 유형 (정보 아이콘)
+
+	Shell_NotifyIcon(NIM_ADD, &nid); // 아이콘 추가
+	//Shell_NotifyIcon(NIM_MODIFY, &nid); // 알림 표시
+}
+
+
 afx_msg LRESULT CMFCChatPrac2ClientDlg::OnReceive(WPARAM wParam, LPARAM lParam)
 {
 	/*AfxMessageBox(_T("CMFCChatPrac2ClientDlg::OnReceive"));*/
@@ -212,6 +244,7 @@ afx_msg LRESULT CMFCChatPrac2ClientDlg::OnReceive(WPARAM wParam, LPARAM lParam)
 	}
 	else { // 일반적으로 메시지를 받는 경우
 		postListBox(strMsg);
+		ShowBalloonNotification(strMsg);
 	}
 
 	return 0;
