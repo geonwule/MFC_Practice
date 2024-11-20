@@ -2,7 +2,7 @@
 #include "CSocCom.h"
 #include <map>
 #define UM_ACCEPT WM_USER + 1
-#define MAX_CLIENTS 3
+#define MAX_CLIENTS 2048
 // CSocServer 명령 대상
 
 class CSocServer : public CSocket
