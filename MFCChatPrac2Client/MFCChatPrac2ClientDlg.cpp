@@ -53,9 +53,9 @@ END_MESSAGE_MAP()
 CMFCChatPrac2ClientDlg::CMFCChatPrac2ClientDlg(CWnd* pParent /*=nullptr*/)
 	: CDialogEx(IDD_MFCCHATPRAC2CLIENT_DIALOG, pParent)
 	, m_strInput(_T(""))
-	, m_strIP(_T(""))
+	, m_strIP(_T("10.120.60.105"))
 	, m_strStatus(_T(""))
-	, m_strNick(_T(""))
+	, m_strNick(_T("닉네임을지정하시오"))
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
