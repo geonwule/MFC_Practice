@@ -78,6 +78,10 @@ BOOL CMFCChatPrac2ClientApp::InitInstance()
 	SetRegistryKey(_T("로컬 애플리케이션 마법사에서 생성된 애플리케이션"));
 
 	CMFCChatPrac2ClientDlg dlg;
+	//명령줄 인수 처리
+	CString strCmdLine = m_lpCmdLine; // 명령줄 전체를 CString으로 가져옴
+	dlg.m_strArgv = strCmdLine;
+
 	m_pMainWnd = &dlg;
 	INT_PTR nResponse = dlg.DoModal();
 	if (nResponse == IDOK)

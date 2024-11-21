@@ -117,6 +117,9 @@ BOOL CMFCChatPrac2ClientDlg::OnInitDialog()
 	// TODO: 여기에 추가 초기화 작업을 추가합니다.
 	m_socClient.Create();
 	m_socClient.Init(m_hWnd);
+
+	//인자로 받은 값을 list에 출력
+	m_listBox.AddString(m_strArgv);
 	return TRUE;  // 포커스를 컨트롤에 설정하지 않으면 TRUE를 반환합니다.
 }
 

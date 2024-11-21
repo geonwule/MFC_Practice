@@ -36,6 +36,7 @@ public:
 	CString m_strIP;
 	CListBox m_listBox;
 	CString m_strStatus;
+	CString m_strArgv;
 private:
 	CSocClient m_socClient;
 protected:
