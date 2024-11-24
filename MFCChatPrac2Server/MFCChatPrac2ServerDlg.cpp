@@ -249,9 +249,26 @@ afx_msg LRESULT CMFCChatPrac2ServerDlg::OnReceive(WPARAM wParam, LPARAM lParam)
 		m_socServer.disconnectClient(soc_client->getID());
 	}
 	else {
-		CString strMsg(pTmp);
-		postListBox(soc_client->getNick() + _T(" : ") + strMsg);
-		sendToAll(soc_client->getNick() + _T(" : ") + strMsg, soc_client->getID());
+		//닉네임 변경
+		if (strstr(pTmp, "/NICK:")) {
+			CString strMsg(&pTmp[7]);
+			eraseUserListBox(soc_client->getNick());
+			soc_client->setNick(strMsg);
+
+			// 리스트박스 추가
+			postListBox(soc_client->getNick());
+			// 사용자목록에 추가
+			postUserListBox(soc_client->getNick());
+			// Status 값 변경
+			m_strStatus = soc_client->getNick() + _T("닉네임 변경");
+			// 유저리스트 업데이트 후 모든 유저에게 전송
+			sendUserList();
+		}
+		else {
+			CString strMsg(pTmp);
+			postListBox(soc_client->getNick() + _T(" : ") + strMsg);
+			sendToAll(soc_client->getNick() + _T(" : ") + strMsg, soc_client->getID());
+		}
 	}
 
 

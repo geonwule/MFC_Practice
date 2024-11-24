@@ -54,7 +54,7 @@ CMFCChatPrac2ClientDlg::CMFCChatPrac2ClientDlg(CWnd* pParent /*=nullptr*/)
 	: CDialogEx(IDD_MFCCHATPRAC2CLIENT_DIALOG, pParent)
 	, m_strInput(_T(""))
 	, m_strIP(_T("10.120.60.105"))
-	, m_strStatus(_T(""))
+	, m_strStatus(_T("NotConnected"))
 	, m_strNick(_T("닉네임을지정하시오"))
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
@@ -70,6 +70,7 @@ void CMFCChatPrac2ClientDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_LIST_USER_LIST, m_listBoxUser);
 	DDX_Text(pDX, IDC_EDIT_NICK, m_strNick);
 	DDX_Control(pDX, IDC_STATIC_USER_LIST, m_listBoxUser);
+	DDX_Control(pDX, IDC_BUTTON_CONNECT, m_buttonConnect);
 }
 
 BEGIN_MESSAGE_MAP(CMFCChatPrac2ClientDlg, CDialogEx)
@@ -258,6 +259,14 @@ void CMFCChatPrac2ClientDlg::OnClickedButtonConnect()
 {
 	UpdateData(TRUE);
 
+	//소켓이 이미 연결된 상태면 닉네임 변경 기능
+	if ( m_strStatus != _T("NotConnected") ) {
+		CString strTmp = _T("/NICK:") + m_strNick;
+		CStringA straTmp(strTmp);
+		m_socClient.Send(straTmp, straTmp.GetLength());
+		return;
+	}
+
 	if (m_socClient.Connect(m_strIP, 5000) == FALSE)
 	{
 		AfxMessageBox(_T("접속 불가"));
@@ -275,6 +284,7 @@ void CMFCChatPrac2ClientDlg::OnClickedButtonConnect()
 		//접속완료 메시지
 		{
 			m_strStatus.Format(_T("접속완료:%s"), m_strIP);
+			m_buttonConnect.SetWindowText(_T("닉네임변경"));
 		}
 	}
 
