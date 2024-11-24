@@ -264,11 +264,21 @@ void CMFCChatPrac2ClientDlg::OnClickedButtonConnect()
 		UpdateData(FALSE);
 		return;
 	}
-	else { // 정상 접속시 입력된 닉네임 전송
-		CString strTmp = _T("NICK:") + m_strNick;
-		CStringA straTmp(strTmp);
-		m_socClient.Send(straTmp, straTmp.GetLength());
+	else {
+		// 정상 접속시 입력된 닉네임 전송
+		{
+			CString strTmp = _T("NICK:") + m_strNick;
+			CStringA straTmp(strTmp);
+			m_socClient.Send(straTmp, straTmp.GetLength());
+		}
+
+		//접속완료 메시지
+		{
+			m_strStatus.Format(_T("접속완료:%s"), m_strIP);
+		}
 	}
+
+	UpdateData(FALSE);
 }
 
 
